@@ -77,6 +77,18 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
     - Ao adicionar essa dependência, o Spring Security ativa uma camada de autenticação padrão automaticamente. Isso significa que qualquer requisição GET resultará em um erro 401 (Não Autorizado), exigindo que o usuário se autentique.
     - Ao acessar o endpoint `http://localhost:8080/products`, o navegador será redirecionado para `http://localhost:8080/login`, onde uma tela de login padrão será apresentada. O acesso é concedido usando as credenciais fornecidas no terminal (`user` como nome de usuário e uma senha gerada automaticamente).
     - No entanto, o objetivo é substituir essa configuração padrão pelo uso de JWT Tokens e Roles para autenticação e autorização, oferecendo uma solução mais segura e flexível.
+   - [ ] Configurar Migrations com Flyway
+     - Migrations são como "históricos" de mudanças no banco de dados.
+     - Para que servem?: Ajudam a manter o banco de dados atualizado e consistente em todos os ambientes.
+     - Cada mudança que você faz no banco (como adicionar uma coluna) é registrada em uma migration. Quando você aplica a migration, o banco de dados é modificado conforme essas mudanças.
+    - *Implementar*:
+    - Crie pasta `db.migration`, depois crie dentro V{num_de_versao}__{NOME}.sql
+    - para cada alteração crie nova migration, com num_de_versao atualizado.
+    - Para criar isso, deve criar a classe no java de UserModel.
+  - [ ] Implementar LOMBOK na classe de produto, para deixar mais consiso a classe.
+  - [ ] Configurar a classe UserModel.java e suas roles, e as collections.
+- ...
+
 
   - [ ] **Criar o pacote `config` e a classe `SecurityConfig.java`**: Centralize a configuração de segurança.
     - [ ] Desabilitar CSRF (opcional): CSRF é desnecessário para APIs RESTful, então pode ser desativado para simplificação.
