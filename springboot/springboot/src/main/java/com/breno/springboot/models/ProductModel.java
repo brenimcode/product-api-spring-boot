@@ -11,10 +11,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "TB_PRODUCTS")
-public class ProductModel extends RepresentationModel<ProductModel> implements Serializable{
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductModel extends RepresentationModel<ProductModel> implements Serializable {
     private static final long serialVersionUID = 1L; // Versão da serialização  
 
     @Id
@@ -22,24 +30,4 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
     private UUID idProduct;
     private String name;
     private BigDecimal value;
-    
-    public UUID getIdProduct() {
-        return idProduct;
-    }
-    public void setIdProduct(UUID idProduct) {
-        this.idProduct = idProduct;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public BigDecimal getValue() {
-        return value;
-    }
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }   
-
 }

@@ -85,18 +85,26 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
     - Crie pasta `db.migration`, depois crie dentro V{num_de_versao}__{NOME}.sql
     - para cada alteração crie nova migration, com num_de_versao atualizado.
     - Para criar isso, deve criar a classe no java de UserModel.
-  - [ ] Implementar LOMBOK na classe de produto, para deixar mais consiso a classe.
-  - [ ] Configurar a classe UserModel.java e suas roles, e as collections.
-- ...
+  - [X] Implementar LOMBOK na classe de produto, para deixar mais consiso a classe.
+  - [X] Configurar a classe UserModel.java e suas roles, e as collections.
+  - [ ] SecurityConfiguration:
+    - Configura a segurança de uma API RESTful com Spring Security.:
+
+    - **Desativa a proteção CSRF:** 
+      - CSRF é um tipo de ataque que pode ocorrer em sites. Como estamos trabalhando com uma API RESTful, que geralmente usa tokens para autenticação, essa proteção não é necessária, então ela é desativada.
+
+    - **Configura a aplicação para ser "stateless":** 
+        - "Stateless" significa que a API não guarda informações sobre o usuário entre as requisições. Ou seja, cada requisição é independente, sem depender de sessões. Isso é importante para APIs porque torna o sistema mais seguro e fácil de escalar.
+
+      ### Resumindo:
+
+      - **CSRF desativado:** Não precisamos dessa proteção em APIs que usam tokens.
+      - **Sem sessões (stateless):** Cada requisição é tratada de forma isolada, sem armazenar dados do usuário entre as requisições.
 
 
-  - [ ] **Criar o pacote `config` e a classe `SecurityConfig.java`**: Centralize a configuração de segurança.
-    - [ ] Desabilitar CSRF (opcional): CSRF é desnecessário para APIs RESTful, então pode ser desativado para simplificação.
-    - [ ] Configurar autorização de requisições (`authorizeHttpRequests`): Especifique quais endpoints são públicos e quais exigem autenticação.
-    - [ ] Implementar autenticação com JWT Tokens: Substitua a autenticação básica padrão por JWT Tokens e Roles para um controle de acesso mais robusto.
 
-  - [ ] **Proteger os endpoints `/products/**`**: Garanta que apenas usuários autenticados possam acessar esses endpoints.
-  - [ ] **Testar a segurança usando Postman**: Verifique o funcionamento da autenticação JWT e a proteção dos endpoints usando Postman.
+
+ - [ ] **Testar a segurança usando Postman**: Verifique o funcionamento da autenticação JWT e a proteção dos endpoints usando Postman.
 
 ### 2. **Validação de Dados**
    - **DTO Validation**: Adicione anotações de validação nos DTOs para garantir a integridade dos dados.
