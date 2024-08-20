@@ -66,9 +66,8 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
   - **Integrar** HATEOAS para links e navegação.
 
 
-# Tasks futuras:
-
 ---
+# Tasks futuras:
 
 ### 1. **Segurança com Spring Security**
   - **Autenticação e Autorização**: Proteja sua API com Spring Security para garantir que apenas usuários autorizados possam acessar e modificar recursos.
@@ -95,11 +94,40 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 
     - **Configura a aplicação para ser "stateless":** 
         - "Stateless" significa que a API não guarda informações sobre o usuário entre as requisições. Ou seja, cada requisição é independente, sem depender de sessões. Isso é importante para APIs porque torna o sistema mais seguro e fácil de escalar.
+        - ***Sem sessões (stateless):*** Cada requisição é tratada de forma isolada, sem armazenar dados do usuário entre as requisições.
+    
+    - **Define as permissões de acesso:** 
+        - O método `authorizeHttpRequests` é usado para configurar as permissões de acesso às rotas da aplicação. No exemplo:
+        - Apenas usuários com a função "ADMIN" têm permissão para realizar requisições `POST` no endpoint `/products`.
+        - Outras requisições são autenticadas, mas sem restrições específicas de papel.
+    - **Constrói o objeto de segurança:** 
+      - A configuração final é construída, aplicando todas as regras definidas para segurança e controle de acesso.
+ - [ ] **Cria Authentication Controller**:
+  
+  - **Cria AuthenticationDTO(String login, String password)**:
+    - **Motivo:** O `AuthenticationDTO` serve como um Data Transfer Object (DTO), encapsula os dados para autenticar um usuário.
 
-      ### Resumindo:
+  - **Cria PostMapping"(/login)"**:
+    - **Motivo:** O mapeamento POST para o endpoint `/login` é essencial para receber as credenciais do usuário e iniciar o processo de autenticação.
+  
+  - **Boa prática: Não salva senha no banco de dados como STRING! Faça um hash da senha e depois salve-a**:
+    - **Motivo:** Armazenar senhas em texto puro é uma vulnerabilidade crítica. Em vez disso, use um algoritmo de hash, como BCrypt, para proteger as senhas. Isso impede que senhas sejam expostas mesmo que o banco de dados seja comprometido.
+    - **Descriptografar para comparar:** Ao autenticar, não é necessário "descriptografar" a senha armazenada. Em vez disso, compare o hash da senha fornecida com o hash armazenado. BCrypt lida automaticamente com essa comparação de forma segura.
 
-      - **CSRF desativado:** Não precisamos dessa proteção em APIs que usam tokens.
-      - **Sem sessões (stateless):** Cada requisição é tratada de forma isolada, sem armazenar dados do usuário entre as requisições.
+  - **Cria o método AuthenticationManager em SecurityConfiguration**:
+    - **Motivo:** O `AuthenticationManager` é responsável por realizar a autenticação. Definir esse bean em `SecurityConfiguration` permite que ele seja injetado e usado no `AuthenticationController` para verificar as credenciais do usuário.
+  
+  - **Cria PostMapping"(/register)"**:
+      - **Motivo:** O mapeamento POST para o endpoint `/register` permite que novos usuários se registrem.
+      - **Verifica se o usuário já existe antes de registrar**
+      - **Criptografa a senha antes de salvar no banco**
+      - **Salva o novo usuário no banco de dados**
+      - **Retorna a resposta apropriada**
+ - [ ] **Configura SecurityConfig novamente**:
+     - ...
+ - [ ] Instalar JWT para geração de TOKENS.
+     - ...
+
 
 
 
@@ -151,3 +179,5 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 
 ### 14. **Criação do README**
    - [ ] Criar um README detalhado, incluindo descrição do projeto, funcionalidades, tecnologias utilizadas, instruções de execução, e como contribuir.
+
+

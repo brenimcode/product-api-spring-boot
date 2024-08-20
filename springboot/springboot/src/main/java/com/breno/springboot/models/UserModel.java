@@ -34,6 +34,12 @@ public class UserModel implements UserDetails {
 
     private UserRole role;
 
+    public UserModel(String login, String password, UserRole role){
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Verifica o papel (role) do usuário
