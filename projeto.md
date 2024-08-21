@@ -125,8 +125,17 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
       - **Retorna a resposta apropriada**
  - [ ] **Configura SecurityConfig novamente**:
      - ...
- - [ ] Instalar JWT para geração de TOKENS.
-     - ...
+ - [ ] Instalar JWT para geração de TOKENS
+    - O usuario criará a conta e retornara o `token` para validar e permitir novas requisições como POST de produtos.
+    -  Motivos:
+            1. **Autenticação Stateless**: JWT permite a autenticação sem a necessidade de manter sessões no servidor, o que é ideal para aplicações escaláveis.
+            2. **Segurança**: JWT pode ser assinado e criptografado, garantindo a integridade e a confidencialidade dos dados de autenticação.
+            3. **Desempenho**: Tokens JWT são compactos e podem ser transmitidos em cada requisição, eliminando a necessidade de consultas repetidas ao banco de dados para autenticação.
+            4. **Controle de Acesso**: JWT pode incluir informações sobre permissões e funções de usuários, simplificando o controle de acesso a recursos específicos na aplicação.
+ - [ ] Configurar TokenService:
+     - public String generateToken(UserModel user): Gera o token com um metodo de criptografia
+     - public Instant: retorna o tempo de expiração do token de 2h
+     - 
 
 
 
