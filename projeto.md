@@ -68,80 +68,96 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 
 ---
 # Tasks futuras:
+### Documentação de Tasks - Projeto Spring Security
 
 ### 1. **Segurança com Spring Security**
-  - **Autenticação e Autorização**: Proteja sua API com Spring Security para garantir que apenas usuários autorizados possam acessar e modificar recursos.
 
-  - [ ] **Adicionar dependências do Spring Security**: Inclua as dependências do Spring Security e Security Test no `pom.xml`.
-    - Ao adicionar essa dependência, o Spring Security ativa uma camada de autenticação padrão automaticamente. Isso significa que qualquer requisição GET resultará em um erro 401 (Não Autorizado), exigindo que o usuário se autentique.
-    - Ao acessar o endpoint `http://localhost:8080/products`, o navegador será redirecionado para `http://localhost:8080/login`, onde uma tela de login padrão será apresentada. O acesso é concedido usando as credenciais fornecidas no terminal (`user` como nome de usuário e uma senha gerada automaticamente).
-    - No entanto, o objetivo é substituir essa configuração padrão pelo uso de JWT Tokens e Roles para autenticação e autorização, oferecendo uma solução mais segura e flexível.
-   - [ ] Configurar Migrations com Flyway
-     - Migrations são como "históricos" de mudanças no banco de dados.
-     - Para que servem?: Ajudam a manter o banco de dados atualizado e consistente em todos os ambientes.
-     - Cada mudança que você faz no banco (como adicionar uma coluna) é registrada em uma migration. Quando você aplica a migration, o banco de dados é modificado conforme essas mudanças.
-    - *Implementar*:
-    - Crie pasta `db.migration`, depois crie dentro V{num_de_versao}__{NOME}.sql
-    - para cada alteração crie nova migration, com num_de_versao atualizado.
-    - Para criar isso, deve criar a classe no java de UserModel.
-  - [X] Implementar LOMBOK na classe de produto, para deixar mais consiso a classe.
-  - [X] Configurar a classe UserModel.java e suas roles, e as collections.
-  - [ ] SecurityConfiguration:
-    - Configura a segurança de uma API RESTful com Spring Security.:
+- **Objetivo**: Proteger a API utilizando Spring Security para assegurar que apenas usuários autenticados e autorizados possam acessar e modificar recursos.
 
-    - **Desativa a proteção CSRF:** 
-      - CSRF é um tipo de ataque que pode ocorrer em sites. Como estamos trabalhando com uma API RESTful, que geralmente usa tokens para autenticação, essa proteção não é necessária, então ela é desativada.
+---
 
-    - **Configura a aplicação para ser "stateless":** 
-        - "Stateless" significa que a API não guarda informações sobre o usuário entre as requisições. Ou seja, cada requisição é independente, sem depender de sessões. Isso é importante para APIs porque torna o sistema mais seguro e fácil de escalar.
-        - ***Sem sessões (stateless):*** Cada requisição é tratada de forma isolada, sem armazenar dados do usuário entre as requisições.
-    
-    - **Define as permissões de acesso:** 
-        - O método `authorizeHttpRequests` é usado para configurar as permissões de acesso às rotas da aplicação. No exemplo:
-        - Apenas usuários com a função "ADMIN" têm permissão para realizar requisições `POST` no endpoint `/products`.
-        - Outras requisições são autenticadas, mas sem restrições específicas de papel.
-    - **Constrói o objeto de segurança:** 
-      - A configuração final é construída, aplicando todas as regras definidas para segurança e controle de acesso.
- - [ ] **Cria Authentication Controller**:
-  
-  - **Cria AuthenticationDTO(String login, String password)**:
-    - **Motivo:** O `AuthenticationDTO` serve como um Data Transfer Object (DTO), encapsula os dados para autenticar um usuário.
+#### [X] **Adicionar dependências do Spring Security**
+   - **Descrição**: Incluímos as dependências de Spring Security e Security Test no `pom.xml`.
+   - **Motivo**: Ao adicionar estas dependências, o Spring Security ativa uma camada de autenticação padrão, resultando em erros 401 (Não Autorizado) para requisições não autenticadas. Esta configuração será substituída pelo uso de JWT Tokens para uma autenticação mais segura e flexível.
 
-  - **Cria PostMapping"(/login)"**:
-    - **Motivo:** O mapeamento POST para o endpoint `/login` é essencial para receber as credenciais do usuário e iniciar o processo de autenticação.
-  
-  - **Boa prática: Não salva senha no banco de dados como STRING! Faça um hash da senha e depois salve-a**:
-    - **Motivo:** Armazenar senhas em texto puro é uma vulnerabilidade crítica. Em vez disso, use um algoritmo de hash, como BCrypt, para proteger as senhas. Isso impede que senhas sejam expostas mesmo que o banco de dados seja comprometido.
-    - **Descriptografar para comparar:** Ao autenticar, não é necessário "descriptografar" a senha armazenada. Em vez disso, compare o hash da senha fornecida com o hash armazenado. BCrypt lida automaticamente com essa comparação de forma segura.
+---
 
-  - **Cria o método AuthenticationManager em SecurityConfiguration**:
-    - **Motivo:** O `AuthenticationManager` é responsável por realizar a autenticação. Definir esse bean em `SecurityConfiguration` permite que ele seja injetado e usado no `AuthenticationController` para verificar as credenciais do usuário.
-  
-  - **Cria PostMapping"(/register)"**:
-      - **Motivo:** O mapeamento POST para o endpoint `/register` permite que novos usuários se registrem.
-      - **Verifica se o usuário já existe antes de registrar**
-      - **Criptografa a senha antes de salvar no banco**
-      - **Salva o novo usuário no banco de dados**
-      - **Retorna a resposta apropriada**
- - [ ] **Configura SecurityConfig novamente**:
-     - ...
- - [ ] Instalar JWT para geração de TOKENS
-    - O usuario criará a conta e retornara o `token` para validar e permitir novas requisições como POST de produtos.
-    -  Motivos:
-            1. **Autenticação Stateless**: JWT permite a autenticação sem a necessidade de manter sessões no servidor, o que é ideal para aplicações escaláveis.
-            2. **Segurança**: JWT pode ser assinado e criptografado, garantindo a integridade e a confidencialidade dos dados de autenticação.
-            3. **Desempenho**: Tokens JWT são compactos e podem ser transmitidos em cada requisição, eliminando a necessidade de consultas repetidas ao banco de dados para autenticação.
-            4. **Controle de Acesso**: JWT pode incluir informações sobre permissões e funções de usuários, simplificando o controle de acesso a recursos específicos na aplicação.
- - [ ] Configurar TokenService:
-     - public String generateToken(UserModel user): Gera o token com um metodo de criptografia
-     - public Instant: retorna o tempo de expiração do token de 2h
-     - 
+#### [X] **Configurar Migrations com Flyway**
+   - **Descrição**: Implementação de migrations para controlar o histórico de alterações no banco de dados.
+   - **Motivo**: Manter o banco de dados atualizado e consistente em todos os ambientes, facilitando a aplicação de alterações no schema.
+   - **Implementação**:
+     - Criada a pasta `db.migration`.
+     - Criados arquivos SQL para cada versão e alteração do banco.
+     - Exemplo: Adição da classe `UserModel` no Java para refletir as mudanças no banco.
+
+---
+
+#### [X] **Implementar Lombok**
+   - **Descrição**: Implementação do Lombok na classe de produto e user.
+   - **Motivo**: Tornar o código mais conciso, reduzindo boilerplate e aumentando a legibilidade.
+
+---
+
+#### [X] **Configurar a Classe `UserModel`**
+   - **Descrição**: Configuração da classe `UserModel`, incluindo roles e collections.
+   - **Motivo**: Definir a estrutura de usuários e suas permissões para a aplicação.
+
+---
+
+#### [X] **Configurar `SecurityConfiguration`**
+   - **Descrição**: Configuração de segurança da API com Spring Security.
+   - **Detalhes**:
+     - **Desativação do CSRF**: Como a API usa tokens, a proteção CSRF é desnecessária.
+     - **Stateless**: Configuração para que a API não guarde informações de sessão, tornando-a mais segura e escalável, apenas usando tokens.
+     - **Permissões de Acesso**: Configuração de permissões de acesso, como restrição de POST no endpoint `/products` para usuários com a role `ADMIN`.
+   - **Motivo**: Garantir uma segurança robusta e adequada ao contexto da aplicação RESTful.
+
+---
+
+#### [X] **Criar `AuthenticationController` e DTOs**
+   - **Descrição**: Criação do controlador de autenticação e `AuthenticationDTO`.
+   - **Motivo**: Facilitar a autenticação de usuários e encapsular dados de login.
+
+   - **Detalhes**:
+     - **PostMapping `/login`**: Recebe credenciais de usuários e inicia o processo de autenticação.
+     - **Armazenamento Seguro de Senhas**: Hash das senhas antes de salvar no banco de dados usando BCrypt.
+     - **PostMapping `/register`**: Permite o registro de novos usuários, verificando a existência de duplicatas e criptografando a senha.
+
+---
+
+#### [X] **Implementar JWT para Geração de Tokens**
+   - **Descrição**: Instalação e configuração de JWT para geração e verificação de tokens.
+   - **Motivo**:
+     1. **Autenticação Stateless**: Elimina a necessidade de sessões no servidor.
+     2. **Segurança**: Tokens podem ser assinados e criptografados, garantindo integridade e confidencialidade.
+     3. **Desempenho**: Tokens compactos e auto-suficientes para cada requisição.
+     4. **Controle de Acesso**: Simplifica a gestão de permissões e acesso.
+
+---
+
+#### [X] **Configurar `TokenService`**
+   - **Descrição**: Implementação de métodos para geração, verificação e expiração de tokens JWT.
+   - **Motivo**: Gerenciar tokens de autenticação com segurança e eficiência.
+
+---
+
+#### [X] **Criar `LoginResponseDTO`**
+   - **Descrição**: DTO para retornar o token JWT no corpo do `ResponseEntity` após login.
+   - **Motivo**: Padronizar e facilitar a resposta da API ao usuário autenticado.
+
+---
+
+#### [X] **Criar `SecurityFilter`**
+   - **Descrição**: Implementação de um filtro de segurança para interceptar e validar as requisições que utilizam tokens JWT.
+   - **Motivo**: Garantir que apenas requisições autenticadas com tokens válidos possam acessar os recursos da API.
+
+#### [X] **Testar a segurança usando Postman**: Verifique o funcionamento da autenticação JWT e a proteção dos endpoints usando Postman. Corretamente implementado Spring Security, JWT Tokens e Roles.
+
+---
+
+ 
 
 
-
-
-
- - [ ] **Testar a segurança usando Postman**: Verifique o funcionamento da autenticação JWT e a proteção dos endpoints usando Postman.
 
 ### 2. **Validação de Dados**
    - **DTO Validation**: Adicione anotações de validação nos DTOs para garantir a integridade dos dados.
@@ -151,11 +167,11 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
    - **Status HTTP**: Use códigos de status HTTP apropriados.
    - **Nomenclatura Consistente**: Mantenha nomenclatura consistente para endpoints e recursos.
 
-### 4. **Paginação e Ordenação**
+### 4. **Paginação e Ordenação Para os Produtos**
    - **Paginação**: Suporte a paginação para grandes conjuntos de dados.
    - **Ordenação**: Permita ordenação dos resultados.
 
-### 5. **Testes**
+### 5. **Testes com JUnit**
    - **Testes Unitários**: Escreva testes para serviços e repositórios.
    - **Testes de Integração**: Verifique a interação entre componentes.
 
@@ -187,6 +203,4 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
    - [ ] Testar a API em ambiente de produção.
 
 ### 14. **Criação do README**
-   - [ ] Criar um README detalhado, incluindo descrição do projeto, funcionalidades, tecnologias utilizadas, instruções de execução, e como contribuir.
-
-
+   - [X] Criar um README detalhado, incluindo descrição do projeto, funcionalidades, tecnologias utilizadas, instruções de execução, e como contribuir.

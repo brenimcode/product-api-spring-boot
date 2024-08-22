@@ -1,6 +1,7 @@
 package com.breno.springboot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.breno.springboot.dtos.AuthenticationDTO;
+import com.breno.springboot.dtos.LoginResponseDTO;
 import com.breno.springboot.dtos.RegisterDTO;
 import com.breno.springboot.models.UserModel;
 import com.breno.springboot.repositories.UserRepository;
+import com.breno.springboot.security.TokenService;
 
 import jakarta.validation.Valid;
 
@@ -26,8 +29,12 @@ public class AuthenticationController {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private TokenService tokenService;
+
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
         // Cria um token de autenticação usando as credenciais fornecidas (login e
         // senha)
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
@@ -35,16 +42,19 @@ public class AuthenticationController {
         // Autentica o token com o AuthenticationManager, verificando as credenciais
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
+        // Gera o token JWT usando o serviço de token
+        var token = tokenService.generateToken((UserModel) auth.getPrincipal());
+
         // Retorna uma resposta HTTP 200 (OK) se a autenticação for bem-sucedida
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterDTO data) {
         // Verifica se já existe um usuário com o mesmo login no banco de dados
         if (this.repository.findByLogin(data.login()) != null) {
             // Se o login já estiver em uso, retorna uma resposta HTTP 400 (Bad Request)
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("User already registered with this login.");
         }
 
         // Criptografa a senha fornecida pelo usuário usando BCrypt
@@ -58,7 +68,7 @@ public class AuthenticationController {
         this.repository.save(newUser);
 
         // Retorna uma resposta HTTP 200 (OK) se o registro for bem-sucedido
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
     }
 
 }
