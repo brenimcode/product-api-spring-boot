@@ -67,10 +67,10 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 
 
 ---
-# Tasks futuras:
-### Documentação de Tasks - Projeto Spring Security
 
-### 1. **Segurança com Spring Security**
+## Tasks futuras:
+
+### [X] 1. **Segurança com Spring Security**
 
 - **Objetivo**: Proteger a API utilizando Spring Security para assegurar que apenas usuários autenticados e autorizados possam acessar e modificar recursos.
 
@@ -159,9 +159,20 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 
 
 
-### 2. **Validação de Dados**
+### [X] 2. **Validação de Dados**
    - **DTO Validation**: Adicione anotações de validação nos DTOs para garantir a integridade dos dados.
    - **Manejo de Erros**: Implemente um handler global de exceções para fornecer mensagens de erro úteis.
+
+   #### Tasklist
+
+   - Criar a classe GlobalExceptionsHandler e pacote exceptions para configurar exceções globais.
+   - Anotação @ControllerAdvice ->  tratar exceções globalmente em toda a aplicação
+   - Criando Solução para nao deixar que crie mais de um produto com mesmo nome
+     - Correção na repository e criação de exceções.
+
+
+
+
 
 ### 3. **Boas Práticas RESTful**
    - **Status HTTP**: Use códigos de status HTTP apropriados.

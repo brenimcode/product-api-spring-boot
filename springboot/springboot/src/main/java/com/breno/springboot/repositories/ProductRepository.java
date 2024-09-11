@@ -9,5 +9,7 @@ import com.breno.springboot.models.ProductModel;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductModel,UUID> {
+
+    boolean existsByName(String name);
     
 }

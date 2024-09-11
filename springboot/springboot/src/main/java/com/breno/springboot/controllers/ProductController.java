@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.breno.springboot.dtos.ProductRecordDto;
+import com.breno.springboot.dtos.ProductRecordDTO;
+import com.breno.springboot.dtos.ResponseDTO;
 import com.breno.springboot.models.ProductModel;
 import com.breno.springboot.repositories.ProductRepository;
 
@@ -30,26 +31,50 @@ public class ProductController {
     ProductRepository productRepository;
 
     @PostMapping("/products")
-    public ResponseEntity<ProductModel> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
-        ProductModel productModel = new ProductModel();
-        // Converte Dto para Model usando um recurso do Spring:
-        BeanUtils.copyProperties(productRecordDto, productModel);
-        // Implementar melhorias como mensagem personalizdas e tratamento especifico
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(productModel));
+    public ResponseEntity<?> saveProduct(@RequestBody @Valid ProductRecordDTO productRecordDto) {
+        // Verificação de existência de produto (exemplo, caso o nome de produto deva
+        // ser único)
+        if (productRepository.existsByName(productRecordDto.name())) {
+           ResponseDTO<ProductModel> errorResponse = new ResponseDTO<>(
+            "error", 
+            "Product already exists with this name", 
+            null
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
+
+    ProductModel productModel = new ProductModel();
+    BeanUtils.copyProperties(productRecordDto, productModel);
+
+    try {
+        ProductModel savedProduct = productRepository.save(productModel);
+        ResponseDTO<ProductModel> successResponse = new ResponseDTO<>(
+            "success", 
+            "Product created successfully", 
+            savedProduct
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
+    } catch (Exception e) {
+        ResponseDTO<ProductModel> errorResponse = new ResponseDTO<>(
+            "error", 
+            "Internal error while creating the product", 
+            null
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+}
 
     @GetMapping("/products")
     public ResponseEntity<List<ProductModel>> getAllProducts() {
         List<ProductModel> productsList = productRepository.findAll();
 
-        if(!productsList.isEmpty()){
+        if (!productsList.isEmpty()) {
 
             for (ProductModel product : productsList) {
                 // Adiciona link HATEOAS para cada produto
                 product.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductController.class)
-                .getOneProduct(product.getIdProduct())).withSelfRel()); // Adiciona o link ao modelo
-                
+                        .getOneProduct(product.getIdProduct())).withSelfRel()); // Adiciona o link ao modelo
+
             }
         }
 
@@ -63,13 +88,13 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
         product.get().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductController.class)
-        .getAllProducts()).withSelfRel());
+                .getAllProducts()).withSelfRel());
         return ResponseEntity.ok().body(product.get());
     }
 
     @PutMapping("/products/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") UUID id,
-            @RequestBody @Valid ProductRecordDto productRecordDto) {
+            @RequestBody @Valid ProductRecordDTO productRecordDto) {
         Optional<ProductModel> product = productRepository.findById(id);
         if (product.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");

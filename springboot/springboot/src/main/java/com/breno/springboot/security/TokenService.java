@@ -11,6 +11,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.breno.springboot.exceptions.TokenGenerationException;
+import com.breno.springboot.exceptions.TokenValidationException;
 import com.breno.springboot.models.UserModel;
 
 @Service
@@ -40,7 +42,7 @@ public class TokenService {
             return token; // Retorna o token gerado.
         } catch (JWTCreationException exception) {
             // Em caso de erro na geração do token, uma exceção é lançada com a mensagem de erro.
-            throw new RuntimeException("Error while generating token", exception);
+            throw new TokenGenerationException("Error while generating token", exception);
         }
     }
 
@@ -61,8 +63,8 @@ public class TokenService {
                 .verify(token) // Verifica o token usando o algoritmo configurado.
                 .getSubject(); // Obtém o assunto (login do usuário) do token.
         } catch (JWTVerificationException e) {
-            // Se o token for inválido ou ocorrer um erro na verificação, uma string vazia é retornada.
-            return "";
+            // Se o token for inválido ou ocorrer um erro na verificação, retorna erro personalizado.
+            throw new TokenValidationException("Invalid token", e);
         }
     }
 
