@@ -169,7 +169,8 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
    - Anotação @ControllerAdvice ->  tratar exceções globalmente em toda a aplicação
    - Criando Solução para nao deixar que crie mais de um produto com mesmo nome
      - Correção na repository e criação de exceções.
-
+   - Solução para que role USER apenas possa fazer GET dos produtos. 
+   - Correção para que ao der erro em tokens, mostrar mensagem no corpo da requisiçao 
 
 
 

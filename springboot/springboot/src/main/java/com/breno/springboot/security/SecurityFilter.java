@@ -29,19 +29,42 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain)
             throws ServletException, IOException {
-        var token = this.recoverToken(request);
-        if (token != null) {
-            var login = tokenService.validateToken(token);
-            if (login != null) { // Verifica se o token é válido
-                UserDetails user = userRepository.findByLogin(login);
-                if (user != null) { // Verifica se o usuário existe no banco de dados
-                    // Cria o objeto de autenticação com as credenciais do usuário
-                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    // Define o contexto de segurança com o usuário autenticado
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+        String requestURI = request.getRequestURI(); // Obtém o URI da requisição
+
+        // Verifica se o endpoint é "/products" ou se o método é POST, PUT, DELETE para
+        // "/products"
+        if (requestURI.startsWith("/products")) {
+            var token = this.recoverToken(request);
+            if (token != null) {
+                try {
+                    var login = tokenService.validateToken(token);
+                    if (login != null) { // Verifica se o token é válido
+                        UserDetails user = userRepository.findByLogin(login);
+                        if (user != null) {
+                            // Cria o objeto de autenticação com as credenciais do usuário
+                            var authentication = new UsernamePasswordAuthenticationToken(user, null,
+                                    user.getAuthorities());
+                            // Define o contexto de segurança com o usuário autenticado
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        }
+                    } else {
+                        // Token inválido
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.getWriter().write("Invalid token.");
+                        return; // Interrompe o filtro
+                    }
+                } catch (Exception e) {
+                    // Erro ao validar o token
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Token validation error: " + e.getMessage());
+                    return; // Interrompe o filtro
                 }
+            } else {
+                // Token não fornecido
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token is missing.");
+                return; // Interrompe o filtro
             }
-            
         }
 
         filterChain.doFilter(request, response);

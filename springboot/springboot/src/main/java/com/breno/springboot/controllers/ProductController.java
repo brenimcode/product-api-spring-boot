@@ -35,34 +35,31 @@ public class ProductController {
         // Verificação de existência de produto (exemplo, caso o nome de produto deva
         // ser único)
         if (productRepository.existsByName(productRecordDto.name())) {
-           ResponseDTO<ProductModel> errorResponse = new ResponseDTO<>(
-            "error", 
-            "Product already exists with this name", 
-            null
-        );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
-    }
+            ResponseDTO<ProductModel> errorResponse = new ResponseDTO<>(
+                    "error",
+                    "Product already exists with this name",
+                    null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        }
 
-    ProductModel productModel = new ProductModel();
-    BeanUtils.copyProperties(productRecordDto, productModel);
+        ProductModel productModel = new ProductModel();
+        BeanUtils.copyProperties(productRecordDto, productModel);
 
-    try {
-        ProductModel savedProduct = productRepository.save(productModel);
-        ResponseDTO<ProductModel> successResponse = new ResponseDTO<>(
-            "success", 
-            "Product created successfully", 
-            savedProduct
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
-    } catch (Exception e) {
-        ResponseDTO<ProductModel> errorResponse = new ResponseDTO<>(
-            "error", 
-            "Internal error while creating the product", 
-            null
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        try {
+            ProductModel savedProduct = productRepository.save(productModel);
+            ResponseDTO<ProductModel> successResponse = new ResponseDTO<>(
+                    "success",
+                    "Product created successfully",
+                    savedProduct);
+            return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
+        } catch (Exception e) {
+            ResponseDTO<ProductModel> errorResponse = new ResponseDTO<>(
+                    "error",
+                    "Internal error while creating the product",
+                    null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
-}
 
     @GetMapping("/products")
     public ResponseEntity<List<ProductModel>> getAllProducts() {
