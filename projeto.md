@@ -10,209 +10,107 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 - **Spring Validation**: Para validação de dados.
 - **Spring HATEOAS**: Para fornecer links e navegação entre recursos na API.
 
-## Tasks Iniciais:
+## Tasklist:
 
+### 1. Estrutura Inicial
 - [X] Iniciar o projeto com Spring Initializer e baixar o arquivo.
-- [X] Estrutura Inicial.
-- [X] Conectar ao banco de dados PostgreSQL:
-  - [X] Criar um servidor no PostgreSQL.
-  - [X] Definir o nome e a senha do servidor (ex.: 123).
-  - [X] Configurar o Host name/address: localhost ou IP.
-- [X] Modelar e mapear a entidade `ProductModel`:
-  - **Criar** a entidade com anotações:
-    - `@Entity`: Mapeia a classe para o banco de dados.
-    - `@Table(name = "nome_tabela")`: Define o nome da tabela.
-    - `implements Serializable`: Permite conversão para bytes.
-    - `@Id`: Marca o campo como chave primária.
-    - `@GeneratedValue(strategy = GenerationType.AUTO)`: Geração automática de IDs.
-    - `UUID`:
-      - **Unicidade Garantida**: Identificador global único.
-      - **Independência**: Geração de IDs sem banco de dados.
-      - **Escalabilidade**: Ideal para sistemas distribuídos.
-- [X] Criar `ProductRepository`:
-  - **Objetivos**:
-    - **Abstrair** acesso a dados.
-    - **Organizar** persistência.
-  - **Estender `JpaRepository<Entidade, Chave primaria>`**:
-    - **Métodos CRUD Predefinidos**.
-    - **Consultas Personalizadas**.
-    - **Integração com Spring Data JPA**.
-    - **Gerenciamento de Transações**.
-  - **Anotação `@Repository`** (opcional):
-    - **Classe como Repositório**.
-    - **Tratamento de Exceções**.
-- [X] Criar `RestController`:
-  - **Responsabilidades**:
-    - Gerenciar requisições HTTP: GET, POST, PUT, DELETE.
-    - Processar e retornar respostas HTTP.
-    - Manipular JSON.
-    - Usar `@RestController`.
-  - **Injeção de Dependência**:
-    - `@Autowired`: Injeta automaticamente `ProductRepository`.
-- [X] Criar `DTO`:
-  - **Imutabilidade**.
-  - **Sintaxe concisa** (getters, hash, equals, construtor).
-- [X] Método POST:
-  - **Retorno**: `ResponseEntity<ProductModel>` para resposta HTTP e corpo com `ProductModel`.
-  - **Anotação**: `@PostMapping("/products")` cria endpoint POST para `/products`.
-  - **Parâmetro**: `@RequestBody` para converter JSON em `ProductRecordDto`.
-  - **Validação**: `@Valid` valida `productRecordDto`.
-  - **Conversão**: `BeanUtils.copyProperties` copia propriedades entre objetos.
-- [X] Método GET:
-  - **Parâmetro**: `@PathVariable(value ="id")` para obter ID da URL.
-- [X] Método DELETE:
-  - **Adicionar** método DELETE.
-- [X] Adicionar HATEOAS e criar hipermídia:
-  - **Integrar** HATEOAS para links e navegação.
+- [X] Criar a estrutura inicial.
 
+### 2. Conectar ao Banco de Dados PostgreSQL
+- [X] Criar um servidor no PostgreSQL.
+- [X] Definir nome e senha do servidor (ex.: 123).
+- [X] Configurar o Host name/address: localhost ou IP.
 
----
+### 3. Modelagem da Entidade `ProductModel`
+- [X] Criar a entidade com as seguintes anotações:
+  - `@Entity`: Mapeia a classe para o banco de dados.
+  - `@Table(name = "nome_tabela")`: Define o nome da tabela.
+  - `implements Serializable`: Permite conversão para bytes.
+  - `@Id`: Define o campo como chave primária.
+  - `@GeneratedValue(strategy = GenerationType.AUTO)`: Geração automática de IDs.
+  - `UUID`: Geração de IDs globais únicos, ideal para sistemas distribuídos.
 
-## Tasks futuras:
+### 4. Criar `ProductRepository`
+- [X] Estender `JpaRepository<Entidade, ChavePrimaria>`:
+  - Métodos CRUD predefinidos.
+  - Consultas personalizadas.
+  - Integração com Spring Data JPA e gerenciamento de transações.
+  - `@Repository` (opcional): Define a classe como repositório e trata exceções.
 
-### [X] 1. **Segurança com Spring Security**
+### 5. Criar `RestController`
+- [X] Gerenciar requisições HTTP (GET, POST, PUT, DELETE).
+- [X] Injeção de dependência com `@Autowired` para `ProductRepository`.
 
-- **Objetivo**: Proteger a API utilizando Spring Security para assegurar que apenas usuários autenticados e autorizados possam acessar e modificar recursos.
+### 6. Implementação de Métodos na API
+- [X] **POST**: 
+  - Criar endpoint para cadastrar produtos com `@PostMapping("/products")`.
+  - Validar com `@Valid` e utilizar `BeanUtils.copyProperties`.
+  - Retorno: `ResponseEntity<ProductModel>`.
+- [X] **GET**: 
+  - Consultar por ID com `@PathVariable(value = "id")`.
+- [X] **DELETE**: 
+  - Implementar método para remover produtos.
 
----
+### 7. Implementar HATEOAS
+- [X] Adicionar HATEOAS para hipermídia e navegação entre recursos.
 
-#### [X] **Adicionar dependências do Spring Security**
-   - **Descrição**: Incluímos as dependências de Spring Security e Security Test no `pom.xml`.
-   - **Motivo**: Ao adicionar estas dependências, o Spring Security ativa uma camada de autenticação padrão, resultando em erros 401 (Não Autorizado) para requisições não autenticadas. Esta configuração será substituída pelo uso de JWT Tokens para uma autenticação mais segura e flexível.
+### 8. Segurança com Spring Security
+- [X] Adicionar dependências de Spring Security e Security Test no `pom.xml`.
+- [X] Configurar Spring Security para autenticação via JWT.
+- [X] Implementar `SecurityConfiguration`:
+  - Desativar CSRF.
+  - Configurar autenticação Stateless com tokens.
+  - Definir permissões por role (ex.: `ADMIN` para POST em `/products`).
+- [X] Criar `AuthenticationController` e DTOs:
+  - Login (`/login`) e registro de usuários (`/register`).
+  - Hash de senhas com BCrypt.
+- [X] Implementar geração e verificação de JWT Tokens:
+  - `TokenService` para gerenciamento de tokens.
+  - `LoginResponseDTO` para retornar o token JWT.
+  - `SecurityFilter` para validação de tokens nas requisições.
+- [X] Testar autenticação e proteção de endpoints com Postman.
 
----
+### 9. Validação de Dados
+- [X] Adicionar validações nos DTOs.
+- [X] Implementar handler global para tratamento de erros.
 
-#### [X] **Configurar Migrations com Flyway**
-   - **Descrição**: Implementação de migrations para controlar o histórico de alterações no banco de dados.
-   - **Motivo**: Manter o banco de dados atualizado e consistente em todos os ambientes, facilitando a aplicação de alterações no schema.
-   - **Implementação**:
-     - Criada a pasta `db.migration`.
-     - Criados arquivos SQL para cada versão e alteração do banco.
-     - Exemplo: Adição da classe `UserModel` no Java para refletir as mudanças no banco.
+### 10. Configurações de Lógica de Negócio e Tratamento de Erros
+- [X] Criar `GlobalExceptionsHandler` e configurar exceções globais.
+- [X] Impedir a criação de produtos com nomes duplicados.
+- [X] Restrição de acesso: apenas `USER` pode fazer GET de produtos.
+- [X] Melhorar o retorno de erros de tokens no corpo da requisição.
 
----
+### 11. Testes com JUnit
+- [ ] Escrever testes unitários e de integração.
+   - **JUnit**: Um framework que facilita o desenvolvimento de testes unitários em aplicações Java. Ele ajuda a garantir que as funcionalidades da aplicação estão funcionando conforme esperado e que novas alterações não introduzam bugs.
+   - **Benefícios**: Permite testar isoladamente componentes da aplicação (unitários) e simular o comportamento de sistemas externos e interações de componentes (integração).
+   - **Exemplo**: Crie testes para serviços, repositórios e validações de entidades.
+   - **Dependências**: Como seu projeto usa Spring Boot, o framework já inclui a dependência `spring-boot-starter-test`, que integra JUnit e outras bibliotecas úteis (Mockito, Hamcrest).
+- [ ] Criar o teste para a classe repository, apenas para entender como funciona
+  - @DataJpaTest, indica ao srping que é classe que vai testar o RepositoryJPA.
+  - Preciso configurar o Banco de dados. Pois, o Repository faz a comunicação com o BANCO, porém esse banco deve ser um banco para testes.
+  - Usar para o ambiente de testes Banco H2 Database que é em memória, apenas para simular um banco.
 
-#### [X] **Implementar Lombok**
-   - **Descrição**: Implementação do Lombok na classe de produto e user.
-   - **Motivo**: Tornar o código mais conciso, reduzindo boilerplate e aumentando a legibilidade.
+### 12. Documentação da API
+- [ ] Adicionar documentação interativa com Swagger ou OpenAPI.
 
----
+### 13. Cache
+- [ ] Implementar caching para otimizar a performance.
 
-#### [X] **Configurar a Classe `UserModel`**
-   - **Descrição**: Configuração da classe `UserModel`, incluindo roles e collections.
-   - **Motivo**: Definir a estrutura de usuários e suas permissões para a aplicação.
+### 14. Performance
+- [ ] Usar profiling para identificar gargalos de desempenho.
+- [ ] Implementar métodos assíncronos para operações de segundo plano.
 
----
+### 15. Configuração de Ambiente
+- [ ] Usar profiles do Spring para separar configurações de desenvolvimento, teste e produção.
 
-#### [X] **Configurar `SecurityConfiguration`**
-   - **Descrição**: Configuração de segurança da API com Spring Security.
-   - **Detalhes**:
-     - **Desativação do CSRF**: Como a API usa tokens, a proteção CSRF é desnecessária.
-     - **Stateless**: Configuração para que a API não guarde informações de sessão, tornando-a mais segura e escalável, apenas usando tokens.
-     - **Permissões de Acesso**: Configuração de permissões de acesso, como restrição de POST no endpoint `/products` para usuários com a role `ADMIN`.
-   - **Motivo**: Garantir uma segurança robusta e adequada ao contexto da aplicação RESTful.
+### 16. Melhorias no DTO
+- [ ] Otimizar respostas da API com uso de DTOs e projeções.
 
----
+### 17. Logging
+- [ ] Adicionar logging detalhado para monitoramento e depuração.
 
-#### [X] **Criar `AuthenticationController` e DTOs**
-   - **Descrição**: Criação do controlador de autenticação e `AuthenticationDTO`.
-   - **Motivo**: Facilitar a autenticação de usuários e encapsular dados de login.
-
-   - **Detalhes**:
-     - **PostMapping `/login`**: Recebe credenciais de usuários e inicia o processo de autenticação.
-     - **Armazenamento Seguro de Senhas**: Hash das senhas antes de salvar no banco de dados usando BCrypt.
-     - **PostMapping `/register`**: Permite o registro de novos usuários, verificando a existência de duplicatas e criptografando a senha.
-
----
-
-#### [X] **Implementar JWT para Geração de Tokens**
-   - **Descrição**: Instalação e configuração de JWT para geração e verificação de tokens.
-   - **Motivo**:
-     1. **Autenticação Stateless**: Elimina a necessidade de sessões no servidor.
-     2. **Segurança**: Tokens podem ser assinados e criptografados, garantindo integridade e confidencialidade.
-     3. **Desempenho**: Tokens compactos e auto-suficientes para cada requisição.
-     4. **Controle de Acesso**: Simplifica a gestão de permissões e acesso.
-
----
-
-#### [X] **Configurar `TokenService`**
-   - **Descrição**: Implementação de métodos para geração, verificação e expiração de tokens JWT.
-   - **Motivo**: Gerenciar tokens de autenticação com segurança e eficiência.
-
----
-
-#### [X] **Criar `LoginResponseDTO`**
-   - **Descrição**: DTO para retornar o token JWT no corpo do `ResponseEntity` após login.
-   - **Motivo**: Padronizar e facilitar a resposta da API ao usuário autenticado.
-
----
-
-#### [X] **Criar `SecurityFilter`**
-   - **Descrição**: Implementação de um filtro de segurança para interceptar e validar as requisições que utilizam tokens JWT.
-   - **Motivo**: Garantir que apenas requisições autenticadas com tokens válidos possam acessar os recursos da API.
-
-#### [X] **Testar a segurança usando Postman**: Verifique o funcionamento da autenticação JWT e a proteção dos endpoints usando Postman. Corretamente implementado Spring Security, JWT Tokens e Roles.
-
----
-
- 
-
-
-
-### [X] 2. **Validação de Dados**
-   - **DTO Validation**: Adicione anotações de validação nos DTOs para garantir a integridade dos dados.
-   - **Manejo de Erros**: Implemente um handler global de exceções para fornecer mensagens de erro úteis.
-
-   #### Tasklist
-
-   - Criar a classe GlobalExceptionsHandler e pacote exceptions para configurar exceções globais.
-   - Anotação @ControllerAdvice ->  tratar exceções globalmente em toda a aplicação
-   - Criando Solução para nao deixar que crie mais de um produto com mesmo nome
-     - Correção na repository e criação de exceções.
-   - Solução para que role USER apenas possa fazer GET dos produtos. 
-   - Correção para que ao der erro em tokens, mostrar mensagem no corpo da requisiçao 
-
-
-
-
-### 3. **Boas Práticas RESTful**
-   - **Status HTTP**: Use códigos de status HTTP apropriados.
-   - **Nomenclatura Consistente**: Mantenha nomenclatura consistente para endpoints e recursos.
-
-### 4. **Paginação e Ordenação Para os Produtos**
-   - **Paginação**: Suporte a paginação para grandes conjuntos de dados.
-   - **Ordenação**: Permita ordenação dos resultados.
-
-### 5. **Testes com JUnit**
-   - **Testes Unitários**: Escreva testes para serviços e repositórios.
-   - **Testes de Integração**: Verifique a interação entre componentes.
-
-### 6. **Documentação da API**
-   - **Swagger/OpenAPI**: Adicione documentação interativa com Swagger ou OpenAPI.
-
-### 7. **Tratamento de Erros**
-   - **Mensagens de Erro**: Forneça mensagens de erro claras e consistentes.
-
-### 8. **Cache**
-   - **Caching**: Implemente caching para melhorar a performance da API.
-
-### 9. **Performance**
-   - **Profiling**: Use ferramentas de profiling para identificar problemas de desempenho.
-   - **Async**: Considere métodos assíncronos para operações em segundo plano.
-
-### 10. **Configuração de Ambiente**
-   - **Profiles**: Use profiles do Spring para separar configurações de desenvolvimento, teste e produção.
-
-### 11. **Melhorias no DTO**
-   - **DTOs e Projeções**: Use DTOs ou projeções para otimizar as respostas da API.
-
-### 12. **Logging**
-   - **Logging**: Adicione logging detalhado para monitorar e depurar a API.
-
-### 13. **Deploy**
-   - **Deploy em Plataforma Gratuita**: Realize o deploy do backend em uma plataforma gratuita, como Heroku ou Railway.
-   - [ ] Configurar variáveis de ambiente e banco de dados na plataforma escolhida.
-   - [ ] Testar a API em ambiente de produção.
-
-### 14. **Criação do README**
-   - [X] Criar um README detalhado, incluindo descrição do projeto, funcionalidades, tecnologias utilizadas, instruções de execução, e como contribuir.
+### 18. Deploy
+- [ ] Realizar deploy do backend em plataformas gratuitas como Heroku ou Railway.
+- [ ] Configurar variáveis de ambiente e banco de dados na plataforma.
+- [ ] Testar a API em ambiente de produção.
