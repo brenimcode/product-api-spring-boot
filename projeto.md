@@ -94,23 +94,19 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 ### 12. Documentação da API
 - [ ] Adicionar documentação interativa com Swagger ou OpenAPI.
 
-### 13. Cache
-- [ ] Implementar caching para otimizar a performance.
-
-### 14. Performance
-- [ ] Usar profiling para identificar gargalos de desempenho.
-- [ ] Implementar métodos assíncronos para operações de segundo plano.
-
 ### 15. Configuração de Ambiente
 - [ ] Usar profiles do Spring para separar configurações de desenvolvimento, teste e produção.
-
-### 16. Melhorias no DTO
-- [ ] Otimizar respostas da API com uso de DTOs e projeções.
-
-### 17. Logging
-- [ ] Adicionar logging detalhado para monitoramento e depuração.
 
 ### 18. Deploy
 - [ ] Realizar deploy do backend em plataformas gratuitas como Heroku ou Railway.
 - [ ] Configurar variáveis de ambiente e banco de dados na plataforma.
 - [ ] Testar a API em ambiente de produção.
+
+### 19. Integração com o Frontend (ReactJS)
+- [ ] Configurar o projeto ReactJS para se comunicar com a API Spring Boot.
+- [ ] Criar serviços no React para realizar requisições à API.
+- [ ] Implementar rotas no React para consumir os dados da API.
+- [ ] Testar a integração entre o frontend e o backend.
+- [ ] Implementar tratamento de erros e feedback ao usuário no React.
+
+

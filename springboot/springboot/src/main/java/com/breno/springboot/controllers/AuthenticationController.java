@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,14 +40,16 @@ public class AuthenticationController {
         // senha)
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
 
-        // Autentica o token com o AuthenticationManager, verificando as credenciais
+        try {
         var auth = this.authenticationManager.authenticate(usernamePassword);
-
-        // Gera o token JWT usando o serviço de token
         var token = tokenService.generateToken((UserModel) auth.getPrincipal());
-
-        // Retorna uma resposta HTTP 200 (OK) se a autenticação for bem-sucedida
         return ResponseEntity.ok(new LoginResponseDTO(token));
+    } catch (BadCredentialsException e) {
+        
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+         .body(new LoginResponseDTO("Login inválido")); // 401
+    }
+
     }
 
     @PostMapping("/register")
