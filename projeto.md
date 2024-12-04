@@ -1,7 +1,8 @@
 # API RESTful com Spring Boot 3 - API de Produtos
 
 ## Descrição
-Este projeto é uma API RESTful para gerenciamento de produtos, construída usando Spring Boot 3. Ele inclui funcionalidades básicas de CRUD (Create, Read, Update, Delete) e utiliza Spring Data JPA para persistência de dados, Spring Validation para validação de entradas, e Spring HATEOAS para navegação de recursos.
+Este projeto é uma API RESTful para gerenciamento de produtos, construída usando Spring Boot 3. Ele inclui funcionalidades básicas de CRUD (Create, Read, Update, Delete) e utiliza Spring Data JPA para persistência de dados, Spring Validation para validação de entradas, e Spring HATEOAS para navegação de recursos, usa Spring Security para fazer autenticação, e segurança, controlando o acesso atraves de Tokens gerados, onde só o ADMIN pode adicionar produtos. 
+
 
 ## Tecnologias
 - **Spring Boot 3**: Framework para criar e configurar a aplicação.
@@ -79,6 +80,7 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
 - [X] Impedir a criação de produtos com nomes duplicados.
 - [X] Restrição de acesso: apenas `USER` pode fazer GET de produtos.
 - [X] Melhorar o retorno de erros de tokens no corpo da requisição.
+- [X] Desativei o Flyway DB
 
 ### 11. Testes com JUnit
 - [ ] Escrever testes unitários e de integração.
@@ -92,21 +94,27 @@ Este projeto é uma API RESTful para gerenciamento de produtos, construída usan
   - Usar para o ambiente de testes Banco H2 Database que é em memória, apenas para simular um banco.
 
 ### 12. Documentação da API
-- [ ] Adicionar documentação interativa com Swagger ou OpenAPI.
+- [ ] Adicionar documentação interativa com Swagger
 
-### 15. Configuração de Ambiente
+### 13. Diagrama das classes e etc.
+- [ ] ...
+
+### 13. Configuração de Ambiente
 - [ ] Usar profiles do Spring para separar configurações de desenvolvimento, teste e produção.
 
+### 14. Docker
+- [ ] Configurar a aplicação em um docker para padronizar.
+
 ### 18. Deploy
-- [ ] Realizar deploy do backend em plataformas gratuitas como Heroku ou Railway.
+- [ ] Realizar deploy do backend em plataforma.
 - [ ] Configurar variáveis de ambiente e banco de dados na plataforma.
 - [ ] Testar a API em ambiente de produção.
 
-### 19. Integração com o Frontend (ReactJS)
-- [ ] Configurar o projeto ReactJS para se comunicar com a API Spring Boot.
-- [ ] Criar serviços no React para realizar requisições à API.
-- [ ] Implementar rotas no React para consumir os dados da API.
-- [ ] Testar a integração entre o frontend e o backend.
-- [ ] Implementar tratamento de erros e feedback ao usuário no React.
+### 19. Fazer um post apresentando a API de Produtos
+- [ ] ...
+
+
+
+
 
 

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.hateoas.RepresentationModel;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,4 +31,5 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
     private UUID idProduct;
     private String name;
     private BigDecimal value;
+
 }
