@@ -24,6 +24,11 @@ public class SecurityConfiguration {
     @Autowired
     SecurityFilter securityFilter;
 
+    private static final String SWAGGER_LIST[] = { "/swagger-ui/**",
+     "/v3/api-docs/**",
+     "/swagger-resources/**"
+    };
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -35,6 +40,7 @@ public class SecurityConfiguration {
             .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
             .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN") // Restringir PUT a ADMIN
             .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN") // Restringir DELETE a ADMIN
+            .requestMatchers(SWAGGER_LIST).permitAll()
             .anyRequest().authenticated()
             ).exceptionHandling(exceptionHandling -> exceptionHandling
             // Define o handler para AccessDeniedException (403 Forbidden)

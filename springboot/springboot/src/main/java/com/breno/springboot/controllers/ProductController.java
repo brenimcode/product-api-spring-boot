@@ -22,6 +22,8 @@ import com.breno.springboot.dtos.ResponseDTO;
 import com.breno.springboot.models.ProductModel;
 import com.breno.springboot.repositories.ProductRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
@@ -62,6 +64,8 @@ public class ProductController {
     }
 
     @GetMapping("/products")
+    @Tag(name = "Produtos" , description = "Informações do produto")
+    @Operation(summary = "Listagem de produtos", description = "Essa função é responsavel por listar produtos.")
     public ResponseEntity<List<ProductModel>> getAllProducts() {
         List<ProductModel> productsList = productRepository.findAll();
 
