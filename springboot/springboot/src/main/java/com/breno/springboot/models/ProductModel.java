@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.springframework.hateoas.RepresentationModel;
 
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +29,10 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idProduct;
+
+    @Schema(example = "Notebook", description = "Nome do produto", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
+    @Schema(example = "8000.00", description = "Nome do produto", requiredMode = Schema.RequiredMode.REQUIRED)
     private BigDecimal value;
 
 }

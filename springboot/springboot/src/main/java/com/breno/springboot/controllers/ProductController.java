@@ -23,6 +23,9 @@ import com.breno.springboot.models.ProductModel;
 import com.breno.springboot.repositories.ProductRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -33,6 +36,7 @@ public class ProductController {
     ProductRepository productRepository;
 
     @PostMapping("/products")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<?> saveProduct(@RequestBody @Valid ProductRecordDTO productRecordDto) {
         // Verificação de existência de produto (exemplo, caso o nome de produto deva
         // ser único)
@@ -64,8 +68,12 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    @Tag(name = "Produtos" , description = "Informações do produto")
+    @Tag(name = "Produtos", description = "Informações do produto")
     @Operation(summary = "Listagem de produtos", description = "Essa função é responsavel por listar produtos.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Requisição bem-sucedida."),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida.")
+    })
     public ResponseEntity<List<ProductModel>> getAllProducts() {
         List<ProductModel> productsList = productRepository.findAll();
 
