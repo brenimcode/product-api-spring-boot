@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +30,11 @@ public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Schema(example = "Mark", description = "Username of the user", requiredMode = Schema.RequiredMode.REQUIRED)
     private String login;
+
+    @Schema(example = "123", description = "Password of the user", requiredMode = Schema.RequiredMode.REQUIRED)
     private String password;
 
     private UserRole role;

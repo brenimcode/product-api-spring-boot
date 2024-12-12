@@ -13,9 +13,9 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI().info(new Info()
-        .title("Gerenciamento de Produtos")
-        .description("API RESTFul de produtos")
-        .version("1")).schemaRequirement("Bearer Authentication", createSecurityScheme());
+            .title("Product Management")
+            .description("RESTful API for products")
+            .version("1")).schemaRequirement("Bearer Authentication", createSecurityScheme());
     }
 
     private SecurityScheme createSecurityScheme(){

@@ -19,10 +19,15 @@ import com.breno.springboot.models.UserModel;
 import com.breno.springboot.repositories.UserRepository;
 import com.breno.springboot.security.TokenService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("auth")
+@Tag(name = "Authentication", description = "User authentication and registration")
 public class AuthenticationController {
 
     @Autowired
@@ -35,6 +40,11 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
+    @Operation(summary = "Login", description = "Authenticates a user and returns a JWT token.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully logged in, returns the token."),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials."),
+    })
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
         // Cria um token de autenticação usando as credenciais fornecidas (login e
         // senha)
@@ -53,6 +63,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register", description = "Registers a new user in the system.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "User successfully created."),
+            @ApiResponse(responseCode = "400", description = "User already registered."),
+    })
     public ResponseEntity<String> register(@RequestBody @Valid RegisterDTO data) {
         // Verifica se já existe um usuário com o mesmo login no banco de dados
         if (this.repository.findByLogin(data.login()) != null) {

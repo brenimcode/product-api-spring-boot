@@ -24,15 +24,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductModel extends RepresentationModel<ProductModel> implements Serializable {
-    private static final long serialVersionUID = 1L; // Versão da serialização  
+    private static final long serialVersionUID = 1L; // Versão da serialização
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idProduct;
 
-    @Schema(example = "Notebook", description = "Nome do produto", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(example = "Laptop", description = "Product name", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
-    @Schema(example = "8000.00", description = "Nome do produto", requiredMode = Schema.RequiredMode.REQUIRED)
+
+    @Schema(example = "8000.00", description = "Product price", requiredMode = Schema.RequiredMode.REQUIRED)
     private BigDecimal value;
 
 }
