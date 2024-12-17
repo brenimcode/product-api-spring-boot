@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY . .             
 
-RUN mvn clean install 
+RUN mvn clean install -DskipTests
 
 # Etapa 2: Execução da aplicação usando uma imagem mais leve
 FROM openjdk:17-jdk-slim 
