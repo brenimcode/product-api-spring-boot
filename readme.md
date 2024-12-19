@@ -81,4 +81,9 @@ The project follows a **Layered Architecture**, adhering to best practices for m
         ```bash
         docker run -p 8080:8080 product-api
         ```
-
+### Visual Diagram of the Application
+<p align="center">
+<img 
+    src="./diagrama_visual.png"
+/>
+</p>
